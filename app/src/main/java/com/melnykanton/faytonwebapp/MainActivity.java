@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -36,13 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         mWebView = (WebView) findViewById(R.id.myWebView);
         WebSettings mWebStngs = mWebView.getSettings();
-        mWebStngs.setJavaScriptEnabled(false);
+        mWebStngs.setJavaScriptEnabled(true);
         mWebStngs.setSupportZoom(true);
-        mWebStngs.setLoadWithOverviewMode(true);
-        mWebStngs.setUseWideViewPort(false);
-        mWebStngs.setDomStorageEnabled(true);
-        mWebView.setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
-        mWebView.setWebViewClient(new MyWebClient());
+        mWebStngs.setUseWideViewPort(true);
+        mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.post(new Runnable() {
             @Override
             public void run() {
@@ -81,4 +79,41 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class MyWebViewClient extends WebViewClient {
+
+    }
+
+    /*private class MyWebClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            String message = "SSL Certificate error.";
+            switch (error.getPrimaryError()) {
+                case SslError.SSL_UNTRUSTED:
+                    message = "The certificate authority is not trusted.";
+                    break;
+                case SslError.SSL_EXPIRED:
+                    message = "The certificate has expired.";
+                    break;
+                case SslError.SSL_IDMISMATCH:
+                    message = "The certificate Hostname mismatch.";
+                    break;
+                case SslError.SSL_NOTYETVALID:
+                    message = "The certificate is not yet valid.";
+                    break;
+            }
+
+            message += "\"SSL Certificate Error\" Do you want to continue anyway?.. YES";
+
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+            handler.proceed();
+        }
+    }*/
 }
